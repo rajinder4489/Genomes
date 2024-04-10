@@ -1,3 +1,12 @@
+# Download the genome (fasta) and gtf files from the Ensembl ftp site (https://ftp.ensembl.org/pub/) 
+# For assembly GRch38, works for release >= 47
+# For assembly GRch37, works for release >= 83 (homo_sapiens only)
+# Builds genome indices for various mapping tools
+# Convert gtf to refflat and bed format
+# To do: option to only download files (fasta and/or annotation)
+# To do: option to only build indices for one or all tools (with or without downloading files)
+
+
 import os
 import subprocess
 from os.path import exists, abspath
@@ -94,14 +103,33 @@ if SPECIES not in ALL_SPECIES:
 print(ASSEMBLY + " " + RELEASE + " " + SPECIES)
 
 
-# dna fasta files
-response = requests.get(f"https://ftp.ensembl.org/pub/{ASSEMBLYPATH}/{RELEASE}/fasta/{SPECIES}/dna/")
+# seq type ###########
+SEQTYPE = config["genome"]["seq_type"]
+if not SEQTYPE:
+    raise WorkflowError("Please provide the seq type via 'seq_type' in the config.yaml!")
+
+
+# get files ###########
+response = requests.get(f"https://ftp.ensembl.org/pub/{ASSEMBLYPATH}/{RELEASE}/fasta/{SPECIES}/{SEQTYPE}/")
 soup = BeautifulSoup(response.content, "html.parser")
 ALL_FILES = list([link['href'] for link in soup.find_all('a') if link.get('href') and not link['href'].endswith('/')])
-#[link.text.strip("/") for link in soup.find_all("a") if "/" in link.text and link.text.endswith("/")]
-#filenames = [link.text.strip("/") for link in soup.find_all("a") if "/" in link.text and link.text.endswith("/")]
 
-print(ALL_FILES[4])
+# patterns ########
+
+file_patterns_include = config["genome"]["file_patterns_include"]
+file_patterns_exclude = config["genome"]["file_patterns_exclude"]
+
+to_match = re.compile('|'.join(file_patterns_include))
+to_remove = re.compile('|'.join(file_patterns_exclude))
+
+
+files_download = [s for s in ALL_FILES if re.search(to_match, s)]
+
+#removed_files = [s for s in matches if re.search(to_remove, s)]
+#[s for s in matches if fnmatch.fnmatch(ALL_FILES, f'*{to_remove}*')]
+#print(removed_files)
+
+files_download = [s for s in files_download if not re.search(to_remove, s)]
 
 
 #################
