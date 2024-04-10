@@ -9,4 +9,4 @@ tasks:
       conda init
       source ~/.bashrc
       clear
-      conda activate snakemake
+      conda activate snakemake && conda install -c conda-forge beautifulsoup4
