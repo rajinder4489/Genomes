@@ -1,0 +1,12 @@
+image: snakemake/snakemake
+
+tasks:
+  - name: main terminal
+    command: |
+      rm Dockerfile
+      echo "PS1='\w\$ '" >> ~/.bashrc
+      echo "*" > .gitignore
+      conda init
+      source ~/.bashrc
+      clear
+      conda activate snakemake
