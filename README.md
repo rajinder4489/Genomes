@@ -1,2 +1,4 @@
 # Genomes
-Download genomes from Ensembl, build indices for various mappers and convert annotation file to various formats
+Download genomes (fasta) and annotation (gtf) from Ensembl.
+Build indices for various mappers (STAR, kallisto, )
+Convert the annotation file (gtf) to various formats (refflat, bed, )
