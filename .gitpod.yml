@@ -2,8 +2,9 @@ image:
   file: snakemake/snakemake
 
 tasks:
-  - init: |
+  - before: |
       pip install beautifulsoup4
+  - init: |
       echo "*" > .gitignore
       conda init bash
       echo "conda activate snakemake" >> ~/.bashrc
