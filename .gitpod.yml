@@ -1,5 +1,4 @@
-image:
-  file: snakemake/snakemake
+image: snakemake/snakemake:stable
 
 tasks:
   - name: Terminal 1

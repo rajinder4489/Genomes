@@ -146,6 +146,11 @@ print(anno_download)
 ##### Rules #####
 #################
 
+rule all:
+    input:
+        expand(os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, SEQTYPE, "{file}"), file = fasta_download), 
+        expand(os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, "annotation", "{file}"), file = anno_download)
+
 
 rule download_genome:
     output:
@@ -179,3 +184,4 @@ rule download_annotation:
                 )
         else:
             print("Skipping download_genome rule.")
+
