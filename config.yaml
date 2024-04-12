@@ -5,10 +5,15 @@ genome:
         release: release-111
         species: acanthochromis_polyacanthus
         seq_type: dna
-        fasta_file_patterns_include: [CHECKSUMS, sm]
-        fasta_file_patterns_exclude: [rm, primary]
-        download_fasta: true
-        download_annotation: true
+        fasta: 
+                download: true
+                file_patterns_include: [CHECKSUMS, sm]
+                file_patterns_exclude: [rm, primary, nonchromosomal]
+        annotation: 
+                download: true
+                file_patterns_include: [gtf]
+                file_patterns_exclude: [abinitio, README]
+        
 build_index:
         bwa: false
         bowtie2: false
