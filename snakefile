@@ -116,35 +116,55 @@ ALL_FILES = list([link['href'] for link in soup.find_all('a') if link.get('href'
 
 # patterns ########
 
-file_patterns_include = config["genome"]["file_patterns_include"]
-file_patterns_exclude = config["genome"]["file_patterns_exclude"]
+file_patterns_include = config["genome"]["fasta_file_patterns_include"]
+file_patterns_exclude = config["genome"]["fasta_file_patterns_exclude"]
 
-to_match = re.compile('|'.join(file_patterns_include))
+to_keep = re.compile('|'.join(file_patterns_include))
 to_remove = re.compile('|'.join(file_patterns_exclude))
 
 
-files_download = [s for s in ALL_FILES if re.search(to_match, s)]
-
-#removed_files = [s for s in matches if re.search(to_remove, s)]
-#[s for s in matches if fnmatch.fnmatch(ALL_FILES, f'*{to_remove}*')]
-#print(removed_files)
-
+files_download = [s for s in ALL_FILES if re.search(to_keep, s)]
 files_download = [s for s in files_download if not re.search(to_remove, s)]
 
+print(files_download)
 
 #################
 ##### Rules #####
 #################
 
+download_fasta = config["genome"]["download_fasta"]
+download_annotation = config["genome"]["download_annotation"]
 
-#rule download_genome:
+rule download_genome:
+    params: 
+        # file_download = files_download
+        lambda wildcards: wildcards.file
+
+    output:
+#        genome_fasta = os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, "dna_fasta", {file}),
+        expand(os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, SEQTYPE, "{file}"), file = files_download)
+    run:
+        if config["genome"]["download_annotation"]:
+            urlretrieve(url, filename)
+            shell(
+                """
+                wget https://ftp.ensembl.org/pub/{ASSEMBLYPATH}/{RELEASE}/fasta/{SPECIES}/{SEQTYPE}/{params.files_download} -P {output}
+                """
+            )
+        else:
+            print("Skipping download_genome rule.")
+
+# echo https://ftp.ensembl.org/pub/{ASSEMBLYPATH}/{RELEASE}/fasta/{SPECIES}/{SEQTYPE}/{params}
+# curl -L https://ftp.ensembl.org/pub/{ASSEMBLYPATH}/{RELEASE}/fasta/{SPECIES}/dna/{SPECIES}.{ASSEMBLY}.dna.primary_assembly.fa.gz | gunzip -c > {output.genome_fasta}
+#rule download_annotation:
 #    output:
-#        genome_fasta = os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, "dna_fasta", "genome.fa"),
 #        genome_gtf = os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, "annotation", "genome.gtf")
-#        # os.path.join(RESOURCES_LOCAL_PATH, f"{SPECIES}.{ASSEMBLY}.gtf")
-#    shell:
-#        """
-#        curl -L https://ftp.ensembl.org/pub/{ASSEMBLYPATH}/{RELEASE}/fasta/{SPECIES}/dna/{SPECIES}.{ASSEMBLY}.dna.primary_assembly.fa.gz | gunzip -c > {output.genome_fasta}
-#        """
-# curl -L https://ftp.ensembl.org/pub/{ASSEMBLY}/{RELEASE}/gtf/{SPECIES}/{SPECIES}.{ASSEMBLY}.gtf.gz | gunzip -c > {output.genome_gtf}
-        
+#    run:
+#        if config["genome"]["download_annotation"]:
+#            shell(
+#                """
+#                curl -L https://ftp.ensembl.org/pub/{ASSEMBLY}/{RELEASE}/gtf/{SPECIES}/{SPECIES}.{ASSEMBLY}.gtf.gz | gunzip -c > {output.genome_gtf}
+#                """
+#            )
+#        else:
+#            print("Skipping download_annotation rule.")
