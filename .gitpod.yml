@@ -2,7 +2,8 @@ image:
   file: snakemake/snakemake
 
 tasks:
-  - init: |
+  - name: Terminal 1
+    init: |
       pip install beautifulsoup4
     command: |
       echo "PS1='\w\$ '" >> ~/.bashrc
