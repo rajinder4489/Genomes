@@ -1,19 +1,5 @@
-image: snakemake/snakemake:stable
-
+# .gitpod.yml
 tasks:
-  - name: Terminal 1
-    command: |
-      echo "PS1='\w\$ '" >> ~/.bashrc
-      echo "*" > .gitignore
-      conda init
-      source ~/.bashrc
-      clear
-      conda activate snakemake
-      pip install beautifulsoup4
-      apt-get update && apt-get install -y wget
-      wget https://github.com/bedops/bedops/releases/download/v2.4.41/bedops_linux_x86_64-v2.4.41.tar.bz2
-      tar -xjf bedops_linux_x86_64-v2.4.41.tar.bz2
-      mv bedops_linux_x86_64-v2.4.41/bin/* /usr/local/bin/
-
-  - name: Terminal 2
-    
+  - init: |
+      pip install snakemake python-beautifulsoup4 os subprocess bedops
+      echo "Dependencies installed!"
