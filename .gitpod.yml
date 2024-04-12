@@ -1,5 +1,5 @@
-# .gitpod.yml
+image:
+  file: .gitpod.Dockerfile
+
 tasks:
-  - init: |
-      pip install snakemake python-beautifulsoup4 os subprocess bedops
-      echo "Dependencies installed!"
+  - init: echo 'Preparing environment'
