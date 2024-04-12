@@ -2,9 +2,9 @@ image:
   file: snakemake/snakemake
 
 tasks:
-  - before: |
+  - init: |
       pip install beautifulsoup4
-  - command: |
+    command: |
       echo "PS1='\w\$ '" >> ~/.bashrc
       echo "*" > .gitignore
       conda init
