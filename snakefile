@@ -185,3 +185,15 @@ rule download_annotation:
         else:
             print("Skipping download_genome rule.")
 
+
+rule gtf_to_bed:
+    input:
+        expand(os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, "annotation", "{file}"), file = anno_download
+    output:
+        expand(os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, "annotation", "{file}"), file = anno_download
+    run:
+        shell(
+            """
+            gtf2bed input > output
+            """
+        )
