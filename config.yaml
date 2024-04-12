@@ -2,7 +2,7 @@
 resources_local_path: "."
 genome:
         assembly: grch38
-        release: [release-111, release-99]
+        release: release-111
         species: acanthochromis_polyacanthus
         seq_type: dna
         fasta_file_patterns_include: [CHECKSUMS, sm]

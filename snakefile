@@ -136,9 +136,9 @@ download_fasta = config["genome"]["download_fasta"]
 download_annotation = config["genome"]["download_annotation"]
 
 rule download_genome:
-    params: 
+    input: 
         # file_download = files_download
-        lambda wildcards: wildcards.file
+        lambda wildcards: wildcards.files_download
 
     output:
 #        genome_fasta = os.path.join(RESOURCES_LOCAL_PATH, SPECIES, ASSEMBLY, RELEASE, "dna_fasta", {file}),
@@ -148,7 +148,7 @@ rule download_genome:
             urlretrieve(url, filename)
             shell(
                 """
-                wget https://ftp.ensembl.org/pub/{ASSEMBLYPATH}/{RELEASE}/fasta/{SPECIES}/{SEQTYPE}/{params.files_download} -P {output}
+                wget https://ftp.ensembl.org/pub/{ASSEMBLYPATH}/{RELEASE}/fasta/{SPECIES}/{SEQTYPE}/{input} -P {output}
                 """
             )
         else:
