@@ -4,7 +4,10 @@ image:
 tasks:
   - before: |
       pip install beautifulsoup4
-  - init: |
+  - command: |
+      echo "PS1='\w\$ '" >> ~/.bashrc
       echo "*" > .gitignore
-      conda init bash
-      echo "conda activate snakemake" >> ~/.bashrc
+      conda init
+      source ~/.bashrc
+      clear
+      conda activate snakemake
