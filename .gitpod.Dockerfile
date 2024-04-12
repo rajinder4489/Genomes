@@ -8,5 +8,4 @@ RUN sudo apt-get update && \
     sudo pip install beautifulsoup4
 
 RUN conda install -n base -c conda-forge mamba && \
-    mamba create -c conda-forge -c bioconda -n snakemake snakemake
-    mamba activate snakemake
+    /opt/conda/envs/mamba/bin/mamba create -c conda-forge -c bioconda -n snakemake snakemake
