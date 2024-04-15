@@ -2,10 +2,23 @@ FROM gitpod/workspace-full
 
 USER gitpod
 
-RUN sudo apt-get update && \
-    sudo apt-get install -y python python3-pip bedops && \
-    sudo python3 -m pip install --upgrade pip && \
-    sudo pip install beautifulsoup4
+FROM python:3.9
 
-RUN conda install -n base -c conda-forge mamba && \
-    /opt/conda/envs/mamba/bin/mamba create -c conda-forge -c bioconda -n snakemake snakemake
+# Install system dependencies
+RUN apt-get update && apt-get install -y wget
+
+# Install Python dependencies
+RUN pip install beautifulsoup4
+
+# Install Snakemake
+RUN git clone --recursive https://github.com/snakemake/snakemake.git && \
+    cd snakemake && \
+    pip install .
+
+# Install BEDOPS
+RUN wget https://github.com/bedops/bedops/releases/download/v2.4.39/bedops_linux_x86_64-v2.4.39.tar.bz2 && \
+    tar -xjf bedops_linux_x86_64-v2.4.39.tar.bz2 && \
+    cd bedops_linux_x86_64-v2.4.39 && \
+    cp bin/* /usr/local/bin/ && \
+    cd .. && \
+    rm -rf bedops_linux_x86_64-v2.4.39*
